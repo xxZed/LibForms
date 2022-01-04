@@ -16,7 +16,7 @@ namespace LibForms
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MemberForm());
+			Application.Run(new LibForm());
 		}
 	}
 }
