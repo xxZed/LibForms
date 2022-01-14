@@ -202,8 +202,8 @@ namespace LibForms.Class
 		public string author { get; set; }
 		public string bookname { get; set; }
 		public string publishdate { get; set; }
-		public string stock { get; set; }
-		public string genreID { get; set; }
+		public int stock { get; set; }
+		public int genreID { get; set; }
 		public string libraryID { get; set; }
 		public string bookID { get; set; }
 
@@ -349,9 +349,9 @@ namespace LibForms.Class
 	class CRUD_Loan : DB
 	{
 
-		public string memberID { get; set; }
-		public string bookID { get; set; }
-		public string employeeID { get; set; }
+		public int memberID { get; set; }
+		public int bookID { get; set; }
+		public int employeeID { get; set; }
 		public string loanDate { get; set; }
 		public string returnDate { get; set; }
 
@@ -374,6 +374,12 @@ namespace LibForms.Class
 				cmd.Parameters.Add("@loanDate", MySqlDbType.VarChar).Value = loanDate;
 				cmd.Parameters.Add("@returnDate", MySqlDbType.VarChar).Value = returnDate;
 
+				cmd.ExecuteNonQuery();
+				con.Close();
+			}
+			using (MySqlCommand cmd = new MySqlCommand())
+			{
+				cmd.CommandText = "UPDATE `book` SET book.Stock = book.Stock - 1 WHERE book.BookID = @bookID";
 				cmd.ExecuteNonQuery();
 				con.Close();
 			}
@@ -410,6 +416,12 @@ namespace LibForms.Class
 
 				cmd.Parameters.Add("@loanID", MySqlDbType.Int32).Value = loanID;
 
+				cmd.ExecuteNonQuery();
+				con.Close();
+			}
+			using (MySqlCommand cmd = new MySqlCommand())
+			{
+				cmd.CommandText = "UPDATE `book` INNER JOIN loan SET book.Stock = book.Stock + 1 WHERE book.BookID = loan.bookID AND loan.LoanID = @loanID";
 				cmd.ExecuteNonQuery();
 				con.Close();
 			}

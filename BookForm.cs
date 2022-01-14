@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LibForms.Class;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,102 +9,87 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
-using System.Data.Sql;
 
 namespace LibForms
 {
 	public partial class BookForm : Form
 	{
+		static string host = "localhost";
+		static string db = "library";
+		static string port = "3306";
+		static string user = "root";
+		static string pass = "";
+		static string constring = "datasource = " + host + "; database = " + db + "; port = " + port + "; username = " + user + "; password = " + pass + "; SslMode=none";
+		
+		MySqlConnection con = new MySqlConnection(constring);
+
+		CRUD_Book crud_book = new CRUD_Book();
+
+		public void READ_Book()
+		{
+			dataGridView3.DataSource = null;
+			crud_book.Read_data();
+			dataGridView3.DataSource = crud_book.dt;
+		}
+
+		public void CREATE_Book()
+		{
+			int id;
+			bool result = int.TryParse(GenreCombo.SelectedValue.ToString(), out id);
+			int.TryParse(b_stock.ToString(), out int stockInt);
+			if((b_author.Text != "") && (b_name.Text != "") && (b_date.Text != ""))
+			{
+				crud_book.author = b_author.Text;
+				crud_book.bookname = b_name.Text;
+				crud_book.publishdate = b_date.Text;
+				crud_book.stock = stockInt;
+				crud_book.genreID = id;
+				crud_book.Create_data();
+			}
+			else
+			{
+				MessageBox.Show("All fields are required!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+		}
+		public void UPDATE_Book()
+		{
+			int id;
+			bool result = int.TryParse(GenreCombo.SelectedValue.ToString(), out id);
+			int.TryParse(b_stock.ToString(), out int stockInt);
+			if ((b_author.Text != "") && (b_name.Text != "") && (b_date.Text != ""))
+			{
+				crud_book.author = b_author.Text;
+				crud_book.bookname = b_name.Text;
+				crud_book.publishdate = b_date.Text;
+				crud_book.stock = stockInt;
+				crud_book.genreID = id;
+				crud_book.Update_data();
+			}
+			else
+			{
+				MessageBox.Show("All fields are required!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+		}
+
 		public BookForm()
-		{ 
+		{
 			InitializeComponent();
 		}
 
-		private void bookBindingNavigatorSaveItem_Click(object sender, EventArgs e)
+		private void BookForm_Load(object sender, EventArgs e)
 		{
-			this.Validate();
-			this.bookBindingSource.EndEdit();
-			this.tableAdapterManager.UpdateAll(this.libraryDataSet);
+			READ_Book();
+			string genreIDQuery = "SELECT * FROM `genre`";
+			MySqlCommand sqlCommand = new MySqlCommand(genreIDQuery, con);
+			con.Open();
 
-		}
+			MySqlDataAdapter sdr = new MySqlDataAdapter(sqlCommand);
+			DataTable dt = new DataTable();
+			sdr.Fill(dt);
 
-		private void GetAllBooks()
-		{		}
-
-		private void Form1_Load(object sender, EventArgs e)
-		{
-
-			// TODO: This line of code loads data into the 'libraryDataSet.Genre' table. You can move, or remove it, as needed.
-			this.genreTableAdapter.Fill(this.libraryDataSet.Genre);
-			// TODO: This line of code loads data into the 'libraryDataSet.Book' table. You can move, or remove it, as needed.
-			this.bookTableAdapter.Fill(this.libraryDataSet.Book);
-
-		}
-
-		private void bookDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-
-		}
-
-		private void genreLabel_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void bookDataGridView_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
-		{
-
-		}
-
-		private void book_idLabel_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void genreBindingSource_CurrentChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void genre_idTextBox_TextChanged(object sender, EventArgs e)
-		{
-			
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void label1_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void button2_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void button3_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void bookDataGridView_CellContentClick_2(object sender, DataGridViewCellEventArgs e)
-		{
-
-		}
-
-		private void stockTextBox_TextChanged(object sender, EventArgs e)
-		{
-
+			GenreCombo.DisplayMember = "Genre";
+			GenreCombo.ValueMember = "GenreID";
+			GenreCombo.DataSource = dt;
 		}
 	}
 }
