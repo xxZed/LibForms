@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using LibForms.Class;
 using MySql.Data.MySqlClient;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 
 namespace LibForms
 {
@@ -20,8 +25,8 @@ namespace LibForms
 		CRUD_Book crud_book = new CRUD_Book();
 		CRUD_Genre crud_genre = new CRUD_Genre();
 		CRUD_Loan crud_loan = new CRUD_Loan();
+		READ_DATA read = new READ_DATA();
 
-		
 		static string host = "localhost";
 		static string db = "library";
 		static string port = "3306";
@@ -44,6 +49,8 @@ namespace LibForms
 			READ_Genre();
 			READ_Book();
 			READ_Loan();
+			READ_DATA();
+			dataGridView6.DataSource = read.dt;
 		}
 		
 		private void label1_Click(object sender, EventArgs e)
@@ -78,7 +85,12 @@ namespace LibForms
 
 
 		//READ
-
+		public void READ_DATA()
+		{
+			dataGridView6.DataSource = null;
+			read.Read_data();
+			dataGridView6.DataSource = read.dt;
+		}
 		public void READ_Member()
 		{
 			dataGridView1.DataSource = null;
@@ -150,6 +162,91 @@ namespace LibForms
 			LoanForm loan = new LoanForm();
 			loan.Show();
 			READ_Loan();
+		}
+
+		private void button5_Click(object sender, EventArgs e)
+		{
+			READ_Book();
+			READ_Employee();
+			READ_Genre();
+			READ_Loan();
+			READ_Member();
+			READ_DATA();
+		}
+		
+		private void button6_Click(object sender, EventArgs e)
+		{
+			if(dataGridView6.Rows.Count > 0)
+			{
+				SaveFileDialog save = new SaveFileDialog();
+				save.Filter = "PDF (*.pdf) | *.pdf";
+				save.FileName = "Result";
+				bool ErrorMessage = false;
+				if (save.ShowDialog() == DialogResult.OK)
+				{
+					if (File.Exists(save.FileName))
+					{
+						try
+						{
+							File.Delete(save.FileName);
+						}
+						catch (Exception ex)
+						{
+							ErrorMessage = true;
+							MessageBox.Show("Unable to create pdf" + ex.Message);
+						}
+						
+					}
+					if (!ErrorMessage)
+					{
+						try
+						{
+							PdfPTable pTable = new PdfPTable(dataGridView6.Columns.Count);
+							pTable.DefaultCell.Padding = 2;
+							pTable.WidthPercentage = 100;
+							pTable.HorizontalAlignment = Element.ALIGN_LEFT;
+							foreach (DataGridViewColumn col in dataGridView6.Columns)
+							{
+								PdfPCell pCell = new PdfPCell(new Phrase(col.HeaderText));
+								pTable.AddCell(pCell);
+							}
+							foreach (DataGridViewRow viewRow in dataGridView6.Rows)
+							{
+								foreach (DataGridViewCell dcell in viewRow.Cells)
+								{
+									if (dcell.Value != null)
+									{
+										pTable.AddCell(dcell.Value.ToString());
+									}
+								}
+							}
+							using (FileStream fs = new FileStream(save.FileName, FileMode.Create))
+							{
+								Document doc = new Document(PageSize.A4, 8f, 16f, 16f, 8f);
+								doc.Open();
+								doc.Add(pTable);
+								doc.Close();
+								fs.Close();
+							}
+							MessageBox.Show("Exported!", "info");
+						}
+						catch (Exception ex)
+						{
+							MessageBox.Show("Error while exporting Data" + ex.Message);
+
+						}
+					}
+					else
+					{
+						MessageBox.Show("No Record Found!");
+					}
+				}
+			}
+		}
+
+		private void dataGridView6_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+			dataGridView6.DataSource = read.dt;
 		}
 	}
 }

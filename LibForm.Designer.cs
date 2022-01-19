@@ -60,6 +60,9 @@ namespace LibForms
 			this.label10 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label12 = new System.Windows.Forms.Label();
+			this.button5 = new System.Windows.Forms.Button();
+			this.button6 = new System.Windows.Forms.Button();
+			this.dataGridView6 = new System.Windows.Forms.DataGridView();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
 			this.groupBox6.SuspendLayout();
 			this.groupBox8.SuspendLayout();
@@ -70,6 +73,7 @@ namespace LibForms
 			this.groupBox4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.groupBox2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// dataGridView3
@@ -111,9 +115,9 @@ namespace LibForms
 			// groupBox10
 			// 
 			this.groupBox10.Controls.Add(this.dataGridView5);
-			this.groupBox10.Location = new System.Drawing.Point(468, 312);
+			this.groupBox10.Location = new System.Drawing.Point(460, 312);
 			this.groupBox10.Name = "groupBox10";
-			this.groupBox10.Size = new System.Drawing.Size(425, 299);
+			this.groupBox10.Size = new System.Drawing.Size(433, 149);
 			this.groupBox10.TabIndex = 5;
 			this.groupBox10.TabStop = false;
 			this.groupBox10.Text = "READ/VIEW LOAN";
@@ -123,7 +127,7 @@ namespace LibForms
 			this.dataGridView5.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView5.Location = new System.Drawing.Point(8, 19);
 			this.dataGridView5.Name = "dataGridView5";
-			this.dataGridView5.Size = new System.Drawing.Size(411, 274);
+			this.dataGridView5.Size = new System.Drawing.Size(419, 126);
 			this.dataGridView5.TabIndex = 0;
 			// 
 			// memberFormOpen
@@ -204,7 +208,7 @@ namespace LibForms
 			// 
 			// button4
 			// 
-			this.button4.Location = new System.Drawing.Point(460, 617);
+			this.button4.Location = new System.Drawing.Point(460, 470);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(433, 23);
 			this.button4.TabIndex = 43;
@@ -342,11 +346,44 @@ namespace LibForms
 			this.label12.TabIndex = 56;
 			this.label12.Text = "$2";
 			// 
+			// button5
+			// 
+			this.button5.Location = new System.Drawing.Point(413, 101);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(75, 23);
+			this.button5.TabIndex = 57;
+			this.button5.Text = "READ";
+			this.button5.UseVisualStyleBackColor = true;
+			this.button5.Click += new System.EventHandler(this.button5_Click);
+			// 
+			// button6
+			// 
+			this.button6.Location = new System.Drawing.Point(682, 592);
+			this.button6.Name = "button6";
+			this.button6.Size = new System.Drawing.Size(211, 23);
+			this.button6.TabIndex = 58;
+			this.button6.Text = "EXPORT";
+			this.button6.UseVisualStyleBackColor = true;
+			this.button6.Click += new System.EventHandler(this.button6_Click);
+			// 
+			// dataGridView6
+			// 
+			this.dataGridView6.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView6.Location = new System.Drawing.Point(460, 499);
+			this.dataGridView6.Name = "dataGridView6";
+			this.dataGridView6.Size = new System.Drawing.Size(433, 87);
+			this.dataGridView6.TabIndex = 44;
+			this.dataGridView6.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView6_CellContentClick);
+			// 
 			// LibForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(900, 649);
+			this.Controls.Add(this.dataGridView6);
+			this.Controls.Add(this.button4);
+			this.Controls.Add(this.button6);
+			this.Controls.Add(this.button5);
 			this.Controls.Add(this.label12);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label10);
@@ -360,7 +397,6 @@ namespace LibForms
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.ProjectLib);
-			this.Controls.Add(this.button4);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
@@ -383,6 +419,7 @@ namespace LibForms
 			this.groupBox4.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.groupBox2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -419,5 +456,8 @@ namespace LibForms
 		private Label label10;
 		private Label label11;
 		private Label label12;
+		private Button button5;
+		private Button button6;
+		private DataGridView dataGridView6;
 	}
 }

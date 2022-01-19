@@ -34,7 +34,6 @@ namespace LibForms
 			this.btn_delete = new System.Windows.Forms.Button();
 			this.btn_save = new System.Windows.Forms.Button();
 			this.btn_update = new System.Windows.Forms.Button();
-			this.enrollmenttxt = new System.Windows.Forms.TextBox();
 			this.idtxt = new System.Windows.Forms.TextBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.emailtxt = new System.Windows.Forms.TextBox();
@@ -50,6 +49,7 @@ namespace LibForms
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
+			this.dateTimePickerMember = new System.Windows.Forms.DateTimePicker();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -57,11 +57,11 @@ namespace LibForms
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.dateTimePickerMember);
 			this.groupBox1.Controls.Add(this.button1);
 			this.groupBox1.Controls.Add(this.btn_delete);
 			this.groupBox1.Controls.Add(this.btn_save);
 			this.groupBox1.Controls.Add(this.btn_update);
-			this.groupBox1.Controls.Add(this.enrollmenttxt);
 			this.groupBox1.Controls.Add(this.idtxt);
 			this.groupBox1.Controls.Add(this.label15);
 			this.groupBox1.Controls.Add(this.emailtxt);
@@ -121,13 +121,6 @@ namespace LibForms
 			this.btn_update.Text = "UPDATE";
 			this.btn_update.UseVisualStyleBackColor = true;
 			this.btn_update.Click += new System.EventHandler(this.btn_update_Click);
-			// 
-			// enrollmenttxt
-			// 
-			this.enrollmenttxt.Location = new System.Drawing.Point(115, 101);
-			this.enrollmenttxt.Name = "enrollmenttxt";
-			this.enrollmenttxt.Size = new System.Drawing.Size(127, 20);
-			this.enrollmenttxt.TabIndex = 13;
 			// 
 			// idtxt
 			// 
@@ -254,6 +247,13 @@ namespace LibForms
 			this.dataGridView1.Size = new System.Drawing.Size(771, 199);
 			this.dataGridView1.TabIndex = 0;
 			// 
+			// dateTimePickerMember
+			// 
+			this.dateTimePickerMember.Location = new System.Drawing.Point(115, 102);
+			this.dateTimePickerMember.Name = "dateTimePickerMember";
+			this.dateTimePickerMember.Size = new System.Drawing.Size(200, 20);
+			this.dateTimePickerMember.TabIndex = 31;
+			// 
 			// MemberForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,7 +279,6 @@ namespace LibForms
 		private System.Windows.Forms.Button btn_delete;
 		private System.Windows.Forms.Button btn_save;
 		private System.Windows.Forms.Button btn_update;
-		private System.Windows.Forms.TextBox enrollmenttxt;
 		private System.Windows.Forms.TextBox idtxt;
 		private System.Windows.Forms.Label label15;
 		private System.Windows.Forms.TextBox emailtxt;
@@ -295,5 +294,6 @@ namespace LibForms
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.DateTimePicker dateTimePickerMember;
 	}
 }

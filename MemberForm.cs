@@ -27,7 +27,7 @@ namespace LibForms
 
 		public void UPDATE_Member()
 		{
-			if ((nametxt.Text != "") && (oibtxt.Text != "") && (addresstxt.Text != "") && (contacttxt.Text != "") && (emailtxt.Text != "") && (enrollmenttxt.Text != ""))
+			if ((nametxt.Text != "") && (oibtxt.Text != "") && (addresstxt.Text != "") && (contacttxt.Text != "") && (emailtxt.Text != "") && (dateTimePickerMember.Value != null))
 			{
 				if (oibtxt.TextLength == 13)
 				{
@@ -36,7 +36,7 @@ namespace LibForms
 					crud_mem.address = addresstxt.Text;
 					crud_mem.contact = contacttxt.Text;
 					crud_mem.email = emailtxt.Text;
-					crud_mem.enrollment = enrollmenttxt.Text;
+					crud_mem.enrollment = dateTimePickerMember.Value;
 					crud_mem.Update_data();
 				}
 				else
@@ -53,7 +53,7 @@ namespace LibForms
 
 		public void CREATE_Member()
 		{
-			if((nametxt.Text != "") && (oibtxt.Text != "") && (addresstxt.Text != "") && (contacttxt.Text != "") && (emailtxt.Text != "") && (enrollmenttxt.Text != ""))
+			if((nametxt.Text != "") && (oibtxt.Text != "") && (addresstxt.Text != "") && (contacttxt.Text != "") && (emailtxt.Text != "") && (dateTimePickerMember.Value != null))
 			{
 				if (oibtxt.TextLength == 13)
 				{
@@ -62,8 +62,8 @@ namespace LibForms
 					crud_mem.address = addresstxt.Text;
 					crud_mem.contact = contacttxt.Text;
 					crud_mem.email = emailtxt.Text;
-					crud_mem.enrollment = enrollmenttxt.Text;
-					crud_mem.Update_data();
+					crud_mem.enrollment = dateTimePickerMember.Value;
+					crud_mem.Create_data();
 				}
 				else
 				{

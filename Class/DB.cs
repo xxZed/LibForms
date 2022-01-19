@@ -23,6 +23,22 @@ namespace LibForms.Class
 		}	
 	}
 
+
+	class READ_DATA : DB
+	{
+		public DataTable dt = new DataTable();
+		public DataSet ds = new DataSet();
+
+		public void Read_data()
+		{
+			dt.Clear();
+			string query = "SELECT * FROM (`member`,`loan`, `book`, `genre`)WHERE loan.BookID = book.BookID AND book.GenreID = genre.GenreID";
+			MySqlDataAdapter MDA = new MySqlDataAdapter(query, con);
+
+			MDA.Fill(ds);
+			dt = ds.Tables[0];
+		}
+	}
 	class CRUD_Member : DB
 	{
 		public string name { get; set; }
@@ -30,7 +46,7 @@ namespace LibForms.Class
 		public string address { get; set; }
 		public string contact { get; set; }
 		public string email { get; set; }
-		public string enrollment { get; set; }
+		public DateTime enrollment { get; set; }
 		public string libraryID { get; set; }
 		public string memberID { get; set; }
 
@@ -50,7 +66,7 @@ namespace LibForms.Class
 				cmd.Parameters.Add("@address", MySqlDbType.VarChar).Value = address;
 				cmd.Parameters.Add("@contact", MySqlDbType.VarChar).Value = contact;
 				cmd.Parameters.Add("@email", MySqlDbType.VarChar).Value = email;
-				cmd.Parameters.Add("@enrollment", MySqlDbType.VarChar).Value = enrollment;
+				cmd.Parameters.Add("@enrollment", MySqlDbType.Date).Value = enrollment;
 				cmd.Parameters.Add("@libraryID", MySqlDbType.Int32).Value = 1;
 
 				cmd.ExecuteNonQuery();
@@ -352,8 +368,8 @@ namespace LibForms.Class
 		public int memberID { get; set; }
 		public int bookID { get; set; }
 		public int employeeID { get; set; }
-		public string loanDate { get; set; }
-		public string returnDate { get; set; }
+		public DateTime loanDate { get; set; }
+		public DateTime returnDate { get; set; }
 
 		public string loanID { get; set; }
 
@@ -371,18 +387,18 @@ namespace LibForms.Class
 				cmd.Parameters.Add("@memberID", MySqlDbType.Int32).Value = memberID;
 				cmd.Parameters.Add("@bookID", MySqlDbType.Int32).Value = bookID;
 				cmd.Parameters.Add("@employeeID", MySqlDbType.Int32).Value = employeeID;
-				cmd.Parameters.Add("@loanDate", MySqlDbType.VarChar).Value = loanDate;
-				cmd.Parameters.Add("@returnDate", MySqlDbType.VarChar).Value = returnDate;
+				cmd.Parameters.Add("@loanDate", MySqlDbType.Date).Value = loanDate;
+				cmd.Parameters.Add("@returnDate", MySqlDbType.Date).Value = returnDate;
 
 				cmd.ExecuteNonQuery();
+
+				string CommandText = "UPDATE `book` SET book.Stock = (book.Stock - 1) WHERE book.BookID = @bookID";
+				MySqlCommand myCommand = new MySqlCommand(CommandText, con);
+				myCommand.Parameters.Add("@bookID", MySqlDbType.Int32).Value = bookID;
+				myCommand.ExecuteNonQuery();
 				con.Close();
 			}
-			using (MySqlCommand cmd = new MySqlCommand())
-			{
-				cmd.CommandText = "UPDATE `book` SET book.Stock = book.Stock - 1 WHERE book.BookID = @bookID";
-				cmd.ExecuteNonQuery();
-				con.Close();
-			}
+			
 		}
 
 		public void Update_data()
@@ -396,8 +412,8 @@ namespace LibForms.Class
 				cmd.Parameters.Add("@memberID", MySqlDbType.Int32).Value = memberID;
 				cmd.Parameters.Add("@bookID", MySqlDbType.Int32).Value = bookID;
 				cmd.Parameters.Add("@employeeID", MySqlDbType.Int32).Value = employeeID;
-				cmd.Parameters.Add("@loanDate", MySqlDbType.VarChar).Value = loanDate;
-				cmd.Parameters.Add("@returnDate", MySqlDbType.VarChar).Value = returnDate;
+				cmd.Parameters.Add("@loanDate", MySqlDbType.Date).Value = loanDate;
+				cmd.Parameters.Add("@returnDate", MySqlDbType.Date).Value = returnDate;
 
 				cmd.Parameters.Add("@loanID", MySqlDbType.Int32).Value = loanID;
 
@@ -417,12 +433,10 @@ namespace LibForms.Class
 				cmd.Parameters.Add("@loanID", MySqlDbType.Int32).Value = loanID;
 
 				cmd.ExecuteNonQuery();
-				con.Close();
-			}
-			using (MySqlCommand cmd = new MySqlCommand())
-			{
-				cmd.CommandText = "UPDATE `book` INNER JOIN loan SET book.Stock = book.Stock + 1 WHERE book.BookID = loan.bookID AND loan.LoanID = @loanID";
-				cmd.ExecuteNonQuery();
+
+				string CommandText = "UPDATE `book` INNER JOIN loan SET book.Stock = (book.Stock + 1) WHERE book.BookID = loan.BookID";
+				MySqlCommand myCommand = new MySqlCommand(CommandText, con);
+				myCommand.ExecuteNonQuery();
 				con.Close();
 			}
 

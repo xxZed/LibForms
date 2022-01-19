@@ -38,13 +38,13 @@ namespace LibForms
 			bool resultBook = int.TryParse(BookBox.SelectedValue.ToString(), out bookID);
 			bool resultEmp = int.TryParse(EmployeeBox.SelectedValue.ToString(), out empID);
 
-			if ( (l_Ldate.Text != "") && (l_Rdate.Text != ""))
+			if ((dateTimePickerLoan.Value != null) && (dateTimePickerReturn.Value != null))
 			{
 				crud_loan.memberID = memID;
 				crud_loan.bookID = bookID;
 				crud_loan.employeeID = empID;
-				crud_loan.loanDate = l_Ldate.Text;
-				crud_loan.returnDate = l_Rdate.Text;
+				crud_loan.loanDate = dateTimePickerLoan.Value;
+				crud_loan.returnDate = dateTimePickerReturn.Value;
 				crud_loan.Create_data();
 				
 			}
@@ -61,13 +61,13 @@ namespace LibForms
 			bool resultBook = int.TryParse(BookBox.SelectedValue.ToString(), out bookID);
 			bool resultEmp = int.TryParse(EmployeeBox.SelectedValue.ToString(), out empID);
 
-			if ((l_Ldate.Text != "") && (l_Rdate.Text != ""))
+			if ((dateTimePickerLoan.Value != null) && (dateTimePickerReturn.Value != null))
 			{
 				crud_loan.memberID = memID;
 				crud_loan.bookID = bookID;
 				crud_loan.employeeID = empID;
-				crud_loan.loanDate = l_Ldate.Text;
-				crud_loan.returnDate = l_Rdate.Text;
+				crud_loan.loanDate = dateTimePickerLoan.Value;
+				crud_loan.returnDate = dateTimePickerReturn.Value;
 				crud_loan.Update_data();
 			}
 			else
@@ -78,8 +78,7 @@ namespace LibForms
 		public void DELETE_Loan()
 		{
 			crud_loan.loanID = l_id.Text;
-			crud_loan.Delete_data();
-			
+			crud_loan.Delete_data();			
 		}
 
 		public LoanForm()
