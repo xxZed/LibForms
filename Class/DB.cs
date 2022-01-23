@@ -125,7 +125,6 @@ namespace LibForms.Class
 
 	}
 
-
 	class CRUD_Employee:DB
 	{
 
@@ -221,7 +220,7 @@ namespace LibForms.Class
 		public int stock { get; set; }
 		public int genreID { get; set; }
 		public string libraryID { get; set; }
-		public string bookID { get; set; }
+		public int bookID { get; set; }
 
 		public DataTable dt = new DataTable();
 		public DataSet ds = new DataSet();
@@ -370,8 +369,8 @@ namespace LibForms.Class
 		public int employeeID { get; set; }
 		public DateTime loanDate { get; set; }
 		public DateTime returnDate { get; set; }
-
 		public string loanID { get; set; }
+		public double pay { get; set; }
 
 		public DataTable dt = new DataTable();
 		public DataSet ds = new DataSet();
@@ -381,6 +380,7 @@ namespace LibForms.Class
 			con.Open();
 			using (MySqlCommand cmd = new MySqlCommand())
 			{
+				
 				cmd.CommandText = "INSERT INTO `loan`(`MemberID`, `BookID`, `EmployeeID`, `LoanDate`, `ReturnDate`) VALUES (@memberID,@bookID,@employeeID,@loanDate,@returnDate)";
 
 				cmd.Connection = con;
@@ -397,6 +397,19 @@ namespace LibForms.Class
 				myCommand.Parameters.Add("@bookID", MySqlDbType.Int32).Value = bookID;
 				myCommand.ExecuteNonQuery();
 				con.Close();
+				TimeSpan ts = returnDate - loanDate;
+
+				if( ts.Days > 30)
+				{
+					con.Open();
+
+					pay = (ts.Days - returnDate.Day) * 2;
+					cmd.CommandText = "UPDATE `loan` SET Pay = @pay";
+					cmd.Parameters.Add("@pay", MySqlDbType.Double).Value = pay;
+					cmd.ExecuteNonQuery();
+					con.Close();
+				}
+				
 			}
 			
 		}
