@@ -93,6 +93,7 @@
 			this.b_read.TabIndex = 32;
 			this.b_read.Text = "READ/VIEW";
 			this.b_read.UseVisualStyleBackColor = true;
+			this.b_read.Click += new System.EventHandler(this.b_read_Click);
 			// 
 			// b_delete
 			// 
@@ -102,6 +103,7 @@
 			this.b_delete.TabIndex = 34;
 			this.b_delete.Text = "DELETE";
 			this.b_delete.UseVisualStyleBackColor = true;
+			this.b_delete.Click += new System.EventHandler(this.b_delete_Click);
 			// 
 			// b_id
 			// 
@@ -119,6 +121,7 @@
 			this.b_save.TabIndex = 31;
 			this.b_save.Text = "SAVE";
 			this.b_save.UseVisualStyleBackColor = true;
+			this.b_save.Click += new System.EventHandler(this.b_save_Click);
 			// 
 			// label13
 			// 
@@ -137,6 +140,7 @@
 			this.b_update.TabIndex = 33;
 			this.b_update.Text = "UPDATE";
 			this.b_update.UseVisualStyleBackColor = true;
+			this.b_update.Click += new System.EventHandler(this.b_update_Click);
 			// 
 			// b_stock
 			// 

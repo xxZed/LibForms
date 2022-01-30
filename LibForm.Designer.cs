@@ -348,7 +348,7 @@ namespace LibForms
 			// 
 			// button5
 			// 
-			this.button5.Location = new System.Drawing.Point(413, 101);
+			this.button5.Location = new System.Drawing.Point(370, 101);
 			this.button5.Name = "button5";
 			this.button5.Size = new System.Drawing.Size(75, 23);
 			this.button5.TabIndex = 57;
@@ -358,7 +358,7 @@ namespace LibForms
 			// 
 			// button6
 			// 
-			this.button6.Location = new System.Drawing.Point(682, 592);
+			this.button6.Location = new System.Drawing.Point(682, 617);
 			this.button6.Name = "button6";
 			this.button6.Size = new System.Drawing.Size(211, 23);
 			this.button6.TabIndex = 58;
@@ -371,7 +371,7 @@ namespace LibForms
 			this.dataGridView6.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView6.Location = new System.Drawing.Point(460, 499);
 			this.dataGridView6.Name = "dataGridView6";
-			this.dataGridView6.Size = new System.Drawing.Size(433, 87);
+			this.dataGridView6.Size = new System.Drawing.Size(433, 112);
 			this.dataGridView6.TabIndex = 44;
 			this.dataGridView6.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView6_CellContentClick);
 			// 

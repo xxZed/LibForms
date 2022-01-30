@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LibWepApi.Controllers;
+using LibWepApi.Models;
 
 namespace LibForms
 {
@@ -22,14 +24,40 @@ namespace LibForms
 		static string constring = "datasource = " + host + "; database = " + db + "; port = " + port + "; username = " + user + "; password = " + pass + "; SslMode=none";
 		
 		MySqlConnection con = new MySqlConnection(constring);
-
-		CRUD_Book crud_book = new CRUD_Book();
-
+		DataSet ds = new DataSet();
+		Book crud_book = new Book();
+		BookController BookController = new BookController();
+		public void READ_NOBUTTON()
+		{
+			ds.Clear();
+			dataGridView3.DataSource = null;
+			ds = BookController.Get();
+			dataGridView3.DataSource = ds.Tables[0];
+		}
 		public void READ_Book()
 		{
-			dataGridView3.DataSource = null;
-			crud_book.Read_data();
-			dataGridView3.DataSource = crud_book.dt;
+			if (b_id.Text == "")
+			{
+				ds.Clear();
+				dataGridView3.DataSource = null;
+				ds = BookController.Get();
+				dataGridView3.DataSource = ds.Tables[0];
+			}			
+			else if (b_id.Text != "Only for update")
+			{
+				int.TryParse(b_id.Text, out int id);
+				ds.Clear();
+				dataGridView3.DataSource = null;
+				ds = BookController.Get(id);
+				dataGridView3.DataSource = ds.Tables[0];
+			}
+			else
+			{
+				ds.Clear();
+				dataGridView3.DataSource = null;
+				ds = BookController.Get();
+				dataGridView3.DataSource = ds.Tables[0];
+			}
 		}
 
 		public void CREATE_Book()
@@ -44,30 +72,51 @@ namespace LibForms
 				crud_book.publishdate = b_date.Text;
 				crud_book.stock = stockInt;
 				crud_book.genreID = id;
-				crud_book.Create_data();
+				BookController.Post(crud_book);
 			}
 			else
 			{
 				MessageBox.Show("All fields are required!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
+
 		public void UPDATE_Book()
 		{
-			int id;
-			bool result = int.TryParse(GenreCombo.SelectedValue.ToString(), out id);
+			bool result = int.TryParse(GenreCombo.SelectedValue.ToString(), out int idGenre);
 			int.TryParse(b_stock.ToString(), out int stockInt);
-			if ((b_author.Text != "") && (b_name.Text != "") && (b_date.Text != ""))
+			int.TryParse(b_id.Text, out int id);
+			if (b_id.Text != "Only for update" || b_id.Text != "")
 			{
-				crud_book.author = b_author.Text;
-				crud_book.bookname = b_name.Text;
-				crud_book.publishdate = b_date.Text;
-				crud_book.stock = stockInt;
-				crud_book.genreID = id;
-				crud_book.Update_data();
+				if ((b_author.Text != "") && (b_name.Text != "") && (b_date.Text != ""))
+				{
+					crud_book.author = b_author.Text;
+					crud_book.bookname = b_name.Text;
+					crud_book.publishdate = b_date.Text;
+					crud_book.stock = stockInt;
+					crud_book.genreID = idGenre;
+					BookController.Put(id, crud_book);
+				}
+				else
+				{
+					MessageBox.Show("All fields are required!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
 			}
 			else
 			{
-				MessageBox.Show("All fields are required!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show("Enter id!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+		}
+
+		public void DELETE_Book()
+		{
+			if (b_id.Text != "Only for update" || b_id.Text != "")
+			{
+				int.TryParse(b_id.Text, out int id);
+				BookController.Delete(id);
+			}
+			else
+			{
+				MessageBox.Show("Please enter id!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
@@ -78,7 +127,7 @@ namespace LibForms
 
 		private void BookForm_Load(object sender, EventArgs e)
 		{
-			READ_Book();
+			READ_NOBUTTON();
 			string genreIDQuery = "SELECT * FROM `genre`";
 			MySqlCommand sqlCommand = new MySqlCommand(genreIDQuery, con);
 			con.Open();
@@ -90,6 +139,29 @@ namespace LibForms
 			GenreCombo.DisplayMember = "Genre";
 			GenreCombo.ValueMember = "GenreID";
 			GenreCombo.DataSource = dt;
+		}
+
+		private void b_delete_Click(object sender, EventArgs e)
+		{
+			DELETE_Book();
+			READ_NOBUTTON();
+		}
+
+		private void b_save_Click(object sender, EventArgs e)
+		{
+			CREATE_Book();
+			READ_NOBUTTON();
+		}
+
+		private void b_update_Click(object sender, EventArgs e)
+		{
+			UPDATE_Book();
+			READ_NOBUTTON();
+		}
+
+		private void b_read_Click(object sender, EventArgs e)
+		{
+			READ_Book();
 		}
 	}
 }

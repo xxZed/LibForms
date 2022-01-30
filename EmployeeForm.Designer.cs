@@ -30,12 +30,12 @@ namespace LibForms
 		private void InitializeComponent()
 		{
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.button2 = new System.Windows.Forms.Button();
-			this.button3 = new System.Windows.Forms.Button();
+			this.eRead = new System.Windows.Forms.Button();
+			this.eDelete = new System.Windows.Forms.Button();
 			this.e_id = new System.Windows.Forms.TextBox();
-			this.button4 = new System.Windows.Forms.Button();
+			this.eSave = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
-			this.button5 = new System.Windows.Forms.Button();
+			this.eUpdate = new System.Windows.Forms.Button();
 			this.e_note = new System.Windows.Forms.TextBox();
 			this.e_contact = new System.Windows.Forms.TextBox();
 			this.e_salary = new System.Windows.Forms.TextBox();
@@ -57,12 +57,12 @@ namespace LibForms
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Controls.Add(this.button2);
-			this.groupBox3.Controls.Add(this.button3);
+			this.groupBox3.Controls.Add(this.eRead);
+			this.groupBox3.Controls.Add(this.eDelete);
 			this.groupBox3.Controls.Add(this.e_id);
-			this.groupBox3.Controls.Add(this.button4);
+			this.groupBox3.Controls.Add(this.eSave);
 			this.groupBox3.Controls.Add(this.label2);
-			this.groupBox3.Controls.Add(this.button5);
+			this.groupBox3.Controls.Add(this.eUpdate);
 			this.groupBox3.Controls.Add(this.e_note);
 			this.groupBox3.Controls.Add(this.e_contact);
 			this.groupBox3.Controls.Add(this.e_salary);
@@ -82,23 +82,25 @@ namespace LibForms
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "CREATE/UPDATE EMPLOYEE";
 			// 
-			// button2
+			// eRead
 			// 
-			this.button2.Location = new System.Drawing.Point(574, 72);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(196, 23);
-			this.button2.TabIndex = 32;
-			this.button2.Text = "READ/VIEW";
-			this.button2.UseVisualStyleBackColor = true;
+			this.eRead.Location = new System.Drawing.Point(574, 72);
+			this.eRead.Name = "eRead";
+			this.eRead.Size = new System.Drawing.Size(196, 23);
+			this.eRead.TabIndex = 32;
+			this.eRead.Text = "READ/VIEW";
+			this.eRead.UseVisualStyleBackColor = true;
+			this.eRead.Click += new System.EventHandler(this.eRead_Click);
 			// 
-			// button3
+			// eDelete
 			// 
-			this.button3.Location = new System.Drawing.Point(574, 101);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(196, 23);
-			this.button3.TabIndex = 34;
-			this.button3.Text = "DELETE";
-			this.button3.UseVisualStyleBackColor = true;
+			this.eDelete.Location = new System.Drawing.Point(574, 101);
+			this.eDelete.Name = "eDelete";
+			this.eDelete.Size = new System.Drawing.Size(196, 23);
+			this.eDelete.TabIndex = 34;
+			this.eDelete.Text = "DELETE";
+			this.eDelete.UseVisualStyleBackColor = true;
+			this.eDelete.Click += new System.EventHandler(this.eDelete_Click);
 			// 
 			// e_id
 			// 
@@ -108,15 +110,15 @@ namespace LibForms
 			this.e_id.TabIndex = 32;
 			this.e_id.Text = "Only for update";
 			// 
-			// button4
+			// eSave
 			// 
-			this.button4.Location = new System.Drawing.Point(574, 13);
-			this.button4.Name = "button4";
-			this.button4.Size = new System.Drawing.Size(196, 23);
-			this.button4.TabIndex = 31;
-			this.button4.Text = "SAVE";
-			this.button4.UseVisualStyleBackColor = true;
-			this.button4.Click += new System.EventHandler(this.button4_Click);
+			this.eSave.Location = new System.Drawing.Point(574, 13);
+			this.eSave.Name = "eSave";
+			this.eSave.Size = new System.Drawing.Size(196, 23);
+			this.eSave.TabIndex = 31;
+			this.eSave.Text = "SAVE";
+			this.eSave.UseVisualStyleBackColor = true;
+			this.eSave.Click += new System.EventHandler(this.eSave_Click);
 			// 
 			// label2
 			// 
@@ -127,14 +129,15 @@ namespace LibForms
 			this.label2.TabIndex = 31;
 			this.label2.Text = "ID:";
 			// 
-			// button5
+			// eUpdate
 			// 
-			this.button5.Location = new System.Drawing.Point(574, 43);
-			this.button5.Name = "button5";
-			this.button5.Size = new System.Drawing.Size(196, 23);
-			this.button5.TabIndex = 33;
-			this.button5.Text = "UPDATE";
-			this.button5.UseVisualStyleBackColor = true;
+			this.eUpdate.Location = new System.Drawing.Point(574, 43);
+			this.eUpdate.Name = "eUpdate";
+			this.eUpdate.Size = new System.Drawing.Size(196, 23);
+			this.eUpdate.TabIndex = 33;
+			this.eUpdate.Text = "UPDATE";
+			this.eUpdate.UseVisualStyleBackColor = true;
+			this.eUpdate.Click += new System.EventHandler(this.eUpdate_Click);
 			// 
 			// e_note
 			// 
@@ -271,12 +274,12 @@ namespace LibForms
 		#endregion
 
 		private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button eRead;
+		private System.Windows.Forms.Button eDelete;
 		private System.Windows.Forms.TextBox e_id;
-		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.Button eSave;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Button button5;
+		private System.Windows.Forms.Button eUpdate;
 		private System.Windows.Forms.TextBox e_note;
 		private System.Windows.Forms.TextBox e_contact;
 		private System.Windows.Forms.TextBox e_salary;
