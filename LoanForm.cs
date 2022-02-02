@@ -8,9 +8,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LibWepApi.Controllers;
-using LibWepApi.Models;
 using System.Windows.Forms;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace LibForms
 {
@@ -28,44 +32,67 @@ namespace LibForms
 		MySqlConnection con = new MySqlConnection(constring);
 
 		public DataSet ds = new DataSet();
+		public HttpClient httpClient = new HttpClient();
 
-		Loan crud_loan = new Loan();
-		LoanController loanController = new LoanController();
 		public void READ_NOBUTTON()
 		{
-			ds.Clear();
-			dataGridView5.DataSource = null;
-			ds = loanController.Get();
-			dataGridView5.DataSource = ds.Tables[0];
+			using (HttpClient client = new HttpClient())
+			{
+
+				client.BaseAddress = new Uri("https://localhost:44334/");
+				var response = client.GetAsync("api/Loan/").Result;
+				
+				if (response.IsSuccessStatusCode)
+				{
+					using (HttpContent content = response.Content)
+					{
+						string jsonS = content.ReadAsStringAsync().Result;
+
+						DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(jsonS, (typeof(DataTable)));
+						dataGridView5.DataSource = dataTable;
+					}
+				}		
+			}
 		}
+		
+
 		public void READ_Loan()
 		{
 			if (l_id.Text == "")
 			{
-				ds.Clear();
-				dataGridView5.DataSource = null;
-				ds = loanController.Get();
-				dataGridView5.DataSource = ds.Tables[0];
+				READ_NOBUTTON();
 			}
 			else if (l_id.Text != "Only for update")
 			{
 				int.TryParse(l_id.Text, out int id);
-				ds.Clear();
-				dataGridView5.DataSource = null;
-				ds = loanController.Get(id);
-				dataGridView5.DataSource = ds.Tables[0];
+				using (HttpClient client = new HttpClient())
+				{
+
+					client.BaseAddress = new Uri("https://localhost:44334/");
+					var response = client.GetAsync("api/Loan/" + id.ToString()).Result;
+
+					if (response.IsSuccessStatusCode)
+					{
+						using (HttpContent content = response.Content)
+						{
+							string jsonS = content.ReadAsStringAsync().Result;
+
+							DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(jsonS, (typeof(DataTable)));
+							dataGridView5.DataSource = dataTable;
+						}
+					}
+				}
 			}
 			else
 			{
-				ds.Clear();
-				dataGridView5.DataSource = null;
-				ds = loanController.Get();
-				dataGridView5.DataSource = ds.Tables[0];
+				READ_NOBUTTON();
 			}
 			
 		}
 		public void CREATE_Loan()
 		{
+			httpClient.BaseAddress = new Uri("https://localhost:44334/");
+			Loans loans = new Loans();
 			int memID, bookID, empID;
 			bool resultMem = int.TryParse(MemberBox.SelectedValue.ToString(), out memID);
 			bool resultBook = int.TryParse(BookBox.SelectedValue.ToString(), out bookID);
@@ -73,13 +100,14 @@ namespace LibForms
 
 			if ((dateTimePickerLoan.Value != null) && (dateTimePickerReturn.Value != null))
 			{
-				crud_loan.memberID = memID;
-				crud_loan.bookID = bookID;
-				crud_loan.employeeID = empID;
-				crud_loan.loanDate = dateTimePickerLoan.Value;
-				crud_loan.returnDate = dateTimePickerReturn.Value;
-				loanController.Post(crud_loan);
-				
+				loans.MemberID = memID;
+				loans.BookID = bookID;
+				loans.EmployeeID = empID;
+				loans.LoanDate = dateTimePickerLoan.Value;
+				loans.ReturnDate = dateTimePickerReturn.Value;
+
+				HttpResponseMessage respones = httpClient.PostAsJsonAsync("/api/Loan", loans).Result;
+				respones.EnsureSuccessStatusCode();
 			}
 			else
 			{
@@ -89,27 +117,23 @@ namespace LibForms
 		//UPDATE
 		public void UPDATE_Loan()
 		{
-			int memID, bookID, empID, loanID;	
+			httpClient.BaseAddress = new Uri("https://localhost:44334/");
+			Loans loans = new Loans();
+			int memID, bookID, empID;
+			bool resultMem = int.TryParse(MemberBox.SelectedValue.ToString(), out memID);
+			bool resultBook = int.TryParse(BookBox.SelectedValue.ToString(), out bookID);
+			bool resultEmp = int.TryParse(EmployeeBox.SelectedValue.ToString(), out empID);
+
 			if ((dateTimePickerLoan.Value != null) && (dateTimePickerReturn.Value != null))
 			{
-				int.TryParse(MemberBox.SelectedValue.ToString(), out memID);
-				int.TryParse(BookBox.SelectedValue.ToString(), out bookID);
-				int.TryParse(EmployeeBox.SelectedValue.ToString(), out empID);
-				int.TryParse(l_id.Text, out loanID);
+				loans.MemberID = memID;
+				loans.BookID = bookID;
+				loans.EmployeeID = empID;
+				loans.LoanDate = dateTimePickerLoan.Value;
+				loans.ReturnDate = dateTimePickerReturn.Value;
 
-				if (l_id.Text != "Only for update" || l_id.Text != "")
-				{
-					crud_loan.memberID = memID;
-					crud_loan.bookID = bookID;
-					crud_loan.employeeID = empID;
-					crud_loan.loanDate = dateTimePickerLoan.Value;
-					crud_loan.returnDate = dateTimePickerReturn.Value;
-					loanController.Put(loanID, crud_loan);
-				}
-				else
-				{
-					MessageBox.Show("Enter id!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				}
+				HttpResponseMessage respones = httpClient.PutAsJsonAsync("/api/Loan", loans).Result;
+				respones.EnsureSuccessStatusCode();
 			}
 			else
 			{
@@ -118,10 +142,12 @@ namespace LibForms
 		}
 		public void DELETE_Loan()
 		{
-			if(l_id.Text != "" || l_id.Text != "Only for update")
+			httpClient.BaseAddress = new Uri("https://localhost:44334/");
+			if (l_id.Text != "" || l_id.Text != "Only for update")
 			{
 				int.TryParse(l_id.Text, out int id);
-				loanController.Delete(id);
+				HttpResponseMessage respones = httpClient.DeleteAsync("/api/Loan/" + id.ToString()).Result;
+				respones.EnsureSuccessStatusCode();
 			}
 			else
 			{
@@ -160,43 +186,71 @@ namespace LibForms
 		private void LoanForm_Load(object sender, EventArgs e)
 		{
 			READ_NOBUTTON();
-			//MemberBox
-			string memIDQuery = "SELECT * FROM `member`";
-			MySqlCommand sqlMem = new MySqlCommand(memIDQuery, con);
+			//MemberBox			
+			using (HttpClient client = new HttpClient())
+			{
 
-			MySqlDataAdapter MemSDR = new MySqlDataAdapter(sqlMem);
-			DataTable MemDT = new DataTable();
-			MemSDR.Fill(MemDT);
+				client.BaseAddress = new Uri("https://localhost:44334/");
+				var response = client.GetAsync("api/Loan/MemberCombo").Result;
 
-			MemberBox.DisplayMember = "FullName";
-			MemberBox.ValueMember = "MemberID";
-			MemberBox.DataSource = MemDT;
+				if (response.IsSuccessStatusCode)
+				{
+					using (HttpContent content = response.Content)
+					{
+						string jsonS = content.ReadAsStringAsync().Result;
 
+						DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(jsonS, (typeof(DataTable)));
+						MemberBox.DisplayMember = "FullName";
+						MemberBox.ValueMember = "MemberID";
+						MemberBox.DataSource = dataTable;
+					}
+				}
+			}
 
 			//BookBox
-			string bookIDQuery = "SELECT * FROM `book`";
-			MySqlCommand sqlBook = new MySqlCommand(bookIDQuery, con);
+			using (HttpClient client = new HttpClient())
+			{
 
-			MySqlDataAdapter BookSDR = new MySqlDataAdapter(sqlBook);
-			DataTable BookDT = new DataTable();
-			BookSDR.Fill(BookDT);
+				client.BaseAddress = new Uri("https://localhost:44334/");
+				var response = client.GetAsync("api/Loan/BookCombo").Result;
 
-			BookBox.DisplayMember = "BookName";
-			BookBox.ValueMember = "BookID";
-			BookBox.DataSource = BookDT;
+				if (response.IsSuccessStatusCode)
+				{
+					using (HttpContent content = response.Content)
+					{
+						string jsonS = content.ReadAsStringAsync().Result;
+
+						DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(jsonS, (typeof(DataTable)));
+						BookBox.DisplayMember = "BookName";
+						BookBox.ValueMember = "BookID";
+						BookBox.DataSource = dataTable;
+					}
+				}
+			}
+
+			
 
 
 			//EmployeeBox
-			string employeeIDQuery = "SELECT * FROM `employee`";
-			MySqlCommand sqlEmployee = new MySqlCommand(employeeIDQuery, con);
+			using (HttpClient client = new HttpClient())
+			{
 
-			MySqlDataAdapter EmployeeSDR = new MySqlDataAdapter(sqlEmployee);
-			DataTable EmployeeDT = new DataTable();
-			EmployeeSDR.Fill(EmployeeDT);
+				client.BaseAddress = new Uri("https://localhost:44334/");
+				var response = client.GetAsync("api/Loan/EmployeeCombo").Result;
 
-			EmployeeBox.DisplayMember = "FullName";
-			EmployeeBox.ValueMember = "EmployeeID";
-			EmployeeBox.DataSource = EmployeeDT;
+				if (response.IsSuccessStatusCode)
+				{
+					using (HttpContent content = response.Content)
+					{
+						string jsonS = content.ReadAsStringAsync().Result;
+
+						DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(jsonS, (typeof(DataTable)));
+						EmployeeBox.DisplayMember = "FullName";
+						EmployeeBox.ValueMember = "EmployeeID";
+						EmployeeBox.DataSource = dataTable;
+					}
+				}
+			}
 		}
 	}
 }

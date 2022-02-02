@@ -105,8 +105,8 @@ namespace LibForms
 		{
 			ds_l.Clear();
 			dataGridView5.DataSource = null;
-			ds_l = loanController.Get();
-			dataGridView5.DataSource = ds_l.Tables[0];
+			//ds_l = loanController.Get();
+			//dataGridView5.DataSource = ds_l.Tables[0];
 		}
 
 		private void MemberForm_Load(object sender, EventArgs e)
